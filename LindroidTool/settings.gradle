@@ -1,0 +1,3 @@
+include ':Lindroid'
+include ':app'
+rootProject.name = "LindroidTool"
