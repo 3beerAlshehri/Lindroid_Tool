@@ -23,7 +23,7 @@ object Lindroid {
     var fileCounter = 0
     const val LINE_NUMBER_KEY_NAME = "lineNumber"
 
-    fun scanFiles() {
+    fun checkAccessibility() {
         listFilesForFolder()
         println("\nTOTAL RESULT: --> You Have $Counter Accessibility Issues In ${fileCounter} Files")
     }
