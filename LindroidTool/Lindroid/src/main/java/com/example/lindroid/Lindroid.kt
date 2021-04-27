@@ -122,6 +122,7 @@ object Lindroid {
         //Array to save labels in one Activity, to prevent duplicate labels.
         val hints: ArrayList<String> = ArrayList<String>()
         val contents: ArrayList<String> = ArrayList<String>()
+        val items: ArrayList<String> = ArrayList<String>()
         //For count violations, potential violations, warnings in one Activity
         var vCounter = 0
         var pvCounter = 0
@@ -232,7 +233,27 @@ object Lindroid {
                     print(": <Potential violation> in line " + textTag.getUserData("lineNumber") + ": In the component <" + textTag.getNodeName())
                     println("> Does the image you inserted contain text? \nIf the answer is \"yes\", this image is not accessible to persons with disabilities.")
                 }
-
+//******************/\/\/\/\/\/\/\/\/\/\/\/\..THIRD RULES: THE LABELS NOT DUPLICATE IN ONE ACTIVITY../\/\/\/\/\/\
+                if (textTag.getNodeName() == "menu"){
+                    if (textTag.getNodeName() == "item"){
+                        val el_item = textElement.getAttribute("android:title")
+                        //if there is title
+                        if (!el_item.isEmpty()) {
+                            //Check title in arraylist, if it exist, there is duplicate, print warning
+                            if (items.contains(el_item)) {
+                                vCounter++
+                                Counter++
+                                print("Issue # $Counter")
+                                println(": <Violation> in line " + textTag.getUserData("lineNumber") + ": duplicate label \"" + el_item + "\" in <" + textTag.getNodeName() + ">")
+                            } else items.add(el_item)
+                        } else {
+                            pvCounter++
+                            Counter++
+                            print("Issue # $Counter")
+                            println(": <Potential violation> in line " + textTag.getUserData("lineNumber") + ": Missing \"title\" to provide clear lable for the component: <" + textTag.getNodeName() + ">")
+                        }
+                    }
+                }
 //******************/\/\/\/\/\/\/\/\/\/\/\/\..SIXTH RULES: THE BUTTON AND OTHER CLICKABLE ELEMENTS SIZE NOT LESS THAN "57dp" HIGHT AND "57dp" WIDTH.
                 if (textTag.getNodeName() == "Button" || textTag.getNodeName() == "ImageButton" || textTag.getNodeName() == "RadioButton" || textTag.getNodeName() == "CheckBox" || textTag.getNodeName() == "Switch" || textTag.getNodeName() == "ToggleButton" || textTag.getNodeName() == "com.google.android.material.floatingactionbutton.FloatingActionButton") {
                     //Read width of the element.
@@ -279,6 +300,7 @@ object Lindroid {
                         println(": <Potential violation> in line " + textTag.getUserData("lineNumber") + ": Missing \"contentDescription\" for the component: <" + textTag.getNodeName() + ">")
                     }
                 }
+
             }
         }
 
