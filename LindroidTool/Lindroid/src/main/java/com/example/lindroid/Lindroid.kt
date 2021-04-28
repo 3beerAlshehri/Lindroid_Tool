@@ -148,12 +148,12 @@ object Lindroid {
 
         //Loop to start parser.
         for (i in 0 until nodeList.length) {
-            val textTag = nodeList.item(i)
+            val Tag = nodeList.item(i)
             //if the node is an element.
-            if (textTag.nodeType == Node.ELEMENT_NODE) {
-                val textElement = textTag as Element
+            if (Tag.nodeType == Node.ELEMENT_NODE) {
+                val element = Tag as Element
                 //Read text size
-                val el_size = textElement.getAttribute("android:textSize")
+                val el_size = element.getAttribute("android:textSize")
 
                 //if there is attribute
                 if (!el_size.isEmpty()) {
@@ -165,7 +165,7 @@ object Lindroid {
                             wCounter++
                             Counter++
                             print("Issue # $Counter")
-                            println(": <Warning> in line " + textTag.getUserData("lineNumber") + ": The text size of <" + textTag.getNodeName() +
+                            println(": <Warning> in line " + Tag.getUserData("lineNumber") + ": The text size of <" + Tag.getNodeName() +
                                     "> is \"" + el_size + "\", For ACCESSIBILITY: it must be not less than \"31\".."
                             )
                         }
@@ -177,17 +177,17 @@ object Lindroid {
 //__________________________________________..text fields must have hint not contentDescription..__________________
 
                 //Read content description of the element
-                val el_contentDescription = textElement.getAttribute("android:contentDescription")
-                if (textTag.getNodeName() == "EditText" || textTag.getNodeName() == "AutoCompleteTextView" || textTag.getNodeName() == "MultiAutoCompleteTextView" || textTag.getNodeName() == "com.google.android.material.textfield.TextInputEditText") {
+                val el_contentDescription = element.getAttribute("android:contentDescription")
+                if (Tag.getNodeName() == "EditText" || Tag.getNodeName() == "AutoCompleteTextView" || Tag.getNodeName() == "MultiAutoCompleteTextView" || Tag.getNodeName() == "com.google.android.material.textfield.TextInputEditText") {
                     //Read hint of the element
-                    val el_hint = textElement.getAttribute("android:hint")
+                    val el_hint = element.getAttribute("android:hint")
 
                     //if there is contentDescription
                     if (!el_contentDescription.isEmpty()) {
                         vCounter++
                         Counter++
                         print("Issue # $Counter")
-                        print(": <Violation> in line " + textTag.getUserData("lineNumber") + ": the component <" + textTag.getNodeName())
+                        print(": <Violation> in line " + Tag.getUserData("lineNumber") + ": the component <" + Tag.getNodeName())
                         println("For ACCESSIBILITY: Input fields should have their speakable text set as “hints”, not “content description”. \n" +
                                 "    If the content description property is set, the screen reader will read it even when the " +
                                 "input field is not empty, which could confuse the user who might not know what part is\n" +
@@ -203,43 +203,64 @@ object Lindroid {
                             vCounter++
                             Counter++
                             print("Issue # $Counter")
-                            println(": <Violation> in line " + textTag.getUserData("lineNumber") + ": For ACCESSIBILITY, this is duplicate label \"" + el_hint + "\" in <" + textTag.getNodeName() + ">")
+                            println(": <Violation> in line " + Tag.getUserData("lineNumber") + ": For ACCESSIBILITY, this is duplicate label \"" + el_hint + "\" in <" + Tag.getNodeName() + ">")
                         } else hints.add(el_hint)
                     } else {
                         pvCounter++
                         Counter++
                         print("Issue # $Counter")
-                        println(": <Potential violation> in line " + textTag.getUserData("lineNumber") + ": For ACCESSIBILITY, set \"hint\" to provide instructions on how to fill the data entry field for the component: <" + textTag.getNodeName() + ">")
+                        println(": <Potential violation> in line " + Tag.getUserData("lineNumber") + ": For ACCESSIBILITY, set \"hint\" to provide instructions on how to fill the data entry field for the component: <" + Tag.getNodeName() + ">")
                     }
 
 //*****************/\/\/\/\/\/\/\/\/\/\/\/\..FOURTH RULES: PROVIDE FIELD FILL-IN TIPS TO AVOID INCREASING THE VISUALLY IMPAIRED USER INTERACTION LOAD DUE TO INCORRECT INPUT.
 
                     //Read fill in tips of the element
-                    val el_text = textElement.getAttribute("android:text")
+                    val el_text = element.getAttribute("android:text")
+                    //if there is no tip
                     if (el_text.isEmpty()) {
                         wCounter++
                         Counter++
                         print("Issue # $Counter")
-                        println(": <Warning> in line " + textTag.getUserData("lineNumber") + ": For ACCESSIBILITY, Try to write text tips to help user to fill field in component <" + textTag.getNodeName() + ">")
+                        println(": <Warning> in line " + Tag.getUserData("lineNumber") + ": For ACCESSIBILITY, Try to write text tips to help user to fill field in component <" + Tag.getNodeName() + ">")
                     }
                 }
 
+                if (Tag.getNodeName() == "TextView"){
+                    //if there is attribute
+                    if (!el_size.isEmpty()) {
+                        val text_size = el_size.substring(0, 2)
+
+//******************/\/\/\/\/\/\/\/\/\/\/\/\..FIRST RULES: TEXT SIZE >= 31sp../\/\/\/\/\/\/\/\/\/\/\
+                        try {
+                            if (text_size.toInt() < 31) {
+                                wCounter++
+                                Counter++
+                                print("Issue # $Counter")
+                                println(": <Warning> in line " + Tag.getUserData("lineNumber") + ": The text size of <" + Tag.getNodeName() +
+                                        "> is \"" + el_size + "\", For ACCESSIBILITY: it must be not less than \"31\".."
+                                )
+                            }
+                        } catch (e: Exception) {
+                        }
+                    } //________________________________________________________________________\\
+                }
+
 //******************/\/\/\/\/\/\/\/\/\/\/\/\..FIFTH RULES: WARN IF THE IMAGE CONTAIN TEXT../\/\/\/\/\/\/\/\/\/\/\
-                if (textTag.getNodeName() == "ImageView") {
+                if (Tag.getNodeName() == "ImageView") {
                     pvCounter++
                     Counter++
                     print("Issue # $Counter")
 
-                    print(": <Potential violation> in line " + textTag.getUserData("lineNumber") + ": In the component <" + textTag.getNodeName())
+                    print(": <Potential violation> in line " + Tag.getUserData("lineNumber") + ": In the component <" + Tag.getNodeName())
                     println("> For ACCESSIBILITY, be careful about 3 issues:\n" +
                             "1.\tIf the image for decorative purpose: not use contentDescription.\n" +
                             "2.\tIf the image contains text information: it is not accessible to persons with disabilities.\n" +
                             "3.\tOtherwise, it must has a clear description.\n")
                 }
 //******************/\/\/\/\/\/\/\/\/\/\/\/\..THIRD RULES: THE LABELS NOT DUPLICATE IN ONE ACTIVITY../\/\/\/\/\/\
-                if (textTag.getNodeName() == "menu"){
-                    if (textTag.getNodeName() == "item"){
-                        val el_item = textElement.getAttribute("android:title")
+                if (Tag.getNodeName() == "menu"){
+                    if (Tag.getNodeName() == "item"){
+                        val el_item = element.getAttribute("android:title")
                         //if there is title
                         if (!el_item.isEmpty()) {
                             //Check title in arraylist, if it exist, there is duplicate, print warning
@@ -247,22 +268,22 @@ object Lindroid {
                                 vCounter++
                                 Counter++
                                 print("Issue # $Counter")
-                                println(": <Violation> in line " + textTag.getUserData("lineNumber") + ": For ACCESSIBILITY, this is duplicate label \"" + el_item + "\" in <" + textTag.getNodeName() + ">")
+                                println(": <Violation> in line " + Tag.getUserData("lineNumber") + ": For ACCESSIBILITY, this is duplicate label \"" + el_item + "\" in <" + Tag.getNodeName() + ">")
                             } else items.add(el_item)
                         } else {
                             pvCounter++
                             Counter++
                             print("Issue # $Counter")
-                            println(": <Potential violation> in line " + textTag.getUserData("lineNumber") + ": For ACCESSIBILITY, set \"title\" to provide clear lable for the component: <" + textTag.getNodeName() + ">")
+                            println(": <Potential violation> in line " + Tag.getUserData("lineNumber") + ": For ACCESSIBILITY, set \"title\" to provide clear lable for the component: <" + Tag.getNodeName() + ">")
                         }
                     }
                 }
 //******************/\/\/\/\/\/\/\/\/\/\/\/\..SIXTH RULES: THE BUTTON AND OTHER CLICKABLE ELEMENTS SIZE NOT LESS THAN "57dp" HIGHT AND "57dp" WIDTH.
-                if (textTag.getNodeName() == "Button" || textTag.getNodeName() == "ImageButton" || textTag.getNodeName() == "RadioButton" || textTag.getNodeName() == "CheckBox" || textTag.getNodeName() == "Switch" || textTag.getNodeName() == "ToggleButton" || textTag.getNodeName() == "com.google.android.material.floatingactionbutton.FloatingActionButton") {
+                if (Tag.getNodeName() == "Button" || Tag.getNodeName() == "ImageButton" || Tag.getNodeName() == "RadioButton" || Tag.getNodeName() == "CheckBox" || Tag.getNodeName() == "Switch" || Tag.getNodeName() == "ToggleButton" || Tag.getNodeName() == "com.google.android.material.floatingactionbutton.FloatingActionButton") {
                     //Read width of the element.
-                    val el_width = textElement.getAttribute("android:layout_width")
+                    val el_width = element.getAttribute("android:layout_width")
                     //Read hight of the element.
-                    val el_height = textElement.getAttribute("android:layout_height")
+                    val el_height = element.getAttribute("android:layout_height")
                     if (!(el_width.equals("wrap_content", ignoreCase = true) || el_width.equals("match_parent", ignoreCase = true))) {
                         val index = el_width.indexOf("d")
                         if (el_width.substring(0, index).toInt() < 57) {
@@ -270,7 +291,7 @@ object Lindroid {
                             Counter++
                             print("Issue # $Counter")
 
-                            println(": <Warning> in line " + textTag.getUserData("lineNumber") + ": The width size of <" + textTag.getNodeName() +
+                            println(": <Warning> in line " + Tag.getUserData("lineNumber") + ": The width size of <" + Tag.getNodeName() +
                                     "> is \"" + el_width + "\"For ACCESSIBILITY, it must be not less than \"57dp\"")
                         }
                     }
@@ -280,7 +301,7 @@ object Lindroid {
                             wCounter++
                             Counter++
                             print("Issue # $Counter")
-                            println(": <Warning> in line " + textTag.getUserData("lineNumber") + ": The height size of <" + textTag.getNodeName() +
+                            println(": <Warning> in line " + Tag.getUserData("lineNumber") + ": The height size of <" + Tag.getNodeName() +
                                     "> is \"" + el_height + "\"For ACCESSIBILITY, it must be not less than \"57dp\"")
                         }
                     }
@@ -294,13 +315,13 @@ object Lindroid {
                             Counter++
                             print("Issue # $Counter")
 
-                            println(": <Violation> in line " + textTag.getUserData("lineNumber") + ": For ACCESSIBILITY, this is duplicate label \"" + el_contentDescription + "\" in <" + textTag.getNodeName() + ">")
+                            println(": <Violation> in line " + Tag.getUserData("lineNumber") + ": For ACCESSIBILITY, this is duplicate label \"" + el_contentDescription + "\" in <" + Tag.getNodeName() + ">")
                         } else contents.add(el_contentDescription)
                     } else {
                         pvCounter++
                         Counter++
                         print("Issue # $Counter")
-                        println(": <Potential violation> in line " + textTag.getUserData("lineNumber") + ": For ACCESSIBILITY, set \"contentDescription\" for the component: <" + textTag.getNodeName() + ">")
+                        println(": <Potential violation> in line " + Tag.getUserData("lineNumber") + ": For ACCESSIBILITY, set \"contentDescription\" for the component: <" + Tag.getNodeName() + ">")
                     }
                 }
 
