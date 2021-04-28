@@ -166,7 +166,7 @@ object Lindroid {
                             Counter++
                             print("Issue # $Counter")
                             println(": <Warning> in line " + textTag.getUserData("lineNumber") + ": The text size of <" + textTag.getNodeName() +
-                                    "> is \"" + el_size + "\", it must be not less than \"31\".."
+                                    "> is \"" + el_size + "\", For ACCESSIBILITY: it must be not less than \"31\".."
                             )
                         }
                     } catch (e: Exception) {
@@ -188,7 +188,7 @@ object Lindroid {
                         Counter++
                         print("Issue # $Counter")
                         print(": <Violation> in line " + textTag.getUserData("lineNumber") + ": the component <" + textTag.getNodeName())
-                        println("Input fields should have their speakable text set as “hints”, not “content description”. \n" +
+                        println("For ACCESSIBILITY: Input fields should have their speakable text set as “hints”, not “content description”. \n" +
                                 "    If the content description property is set, the screen reader will read it even when the " +
                                 "input field is not empty, which could confuse the user who might not know what part is\n" +
                                 "    the text in the input field and which part is the content description.")
@@ -203,13 +203,13 @@ object Lindroid {
                             vCounter++
                             Counter++
                             print("Issue # $Counter")
-                            println(": <Violation> in line " + textTag.getUserData("lineNumber") + ": duplicate label \"" + el_hint + "\" in <" + textTag.getNodeName() + ">")
+                            println(": <Violation> in line " + textTag.getUserData("lineNumber") + ": For ACCESSIBILITY, this is duplicate label \"" + el_hint + "\" in <" + textTag.getNodeName() + ">")
                         } else hints.add(el_hint)
                     } else {
                         pvCounter++
                         Counter++
                         print("Issue # $Counter")
-                        println(": <Potential violation> in line " + textTag.getUserData("lineNumber") + ": Missing \"hint\" to provide instructions on how to fill the data entry field for the component: <" + textTag.getNodeName() + ">")
+                        println(": <Potential violation> in line " + textTag.getUserData("lineNumber") + ": For ACCESSIBILITY, set \"hint\" to provide instructions on how to fill the data entry field for the component: <" + textTag.getNodeName() + ">")
                     }
 
 //*****************/\/\/\/\/\/\/\/\/\/\/\/\..FOURTH RULES: PROVIDE FIELD FILL-IN TIPS TO AVOID INCREASING THE VISUALLY IMPAIRED USER INTERACTION LOAD DUE TO INCORRECT INPUT.
@@ -220,7 +220,7 @@ object Lindroid {
                         wCounter++
                         Counter++
                         print("Issue # $Counter")
-                        println(": <Warning> in line " + textTag.getUserData("lineNumber") + ": Try to write text tips to help user to fill field in component <" + textTag.getNodeName() + ">")
+                        println(": <Warning> in line " + textTag.getUserData("lineNumber") + ": For ACCESSIBILITY, Try to write text tips to help user to fill field in component <" + textTag.getNodeName() + ">")
                     }
                 }
 
@@ -231,7 +231,7 @@ object Lindroid {
                     print("Issue # $Counter")
 
                     print(": <Potential violation> in line " + textTag.getUserData("lineNumber") + ": In the component <" + textTag.getNodeName())
-                    println("> Be careful about 3 issues:\n" +
+                    println("> For ACCESSIBILITY, be careful about 3 issues:\n" +
                             "1.\tIf the image for decorative purpose: not use contentDescription.\n" +
                             "2.\tIf the image contains text information: it is not accessible to persons with disabilities.\n" +
                             "3.\tOtherwise, it must has a clear description.\n")
@@ -247,13 +247,13 @@ object Lindroid {
                                 vCounter++
                                 Counter++
                                 print("Issue # $Counter")
-                                println(": <Violation> in line " + textTag.getUserData("lineNumber") + ": duplicate label \"" + el_item + "\" in <" + textTag.getNodeName() + ">")
+                                println(": <Violation> in line " + textTag.getUserData("lineNumber") + ": For ACCESSIBILITY, this is duplicate label \"" + el_item + "\" in <" + textTag.getNodeName() + ">")
                             } else items.add(el_item)
                         } else {
                             pvCounter++
                             Counter++
                             print("Issue # $Counter")
-                            println(": <Potential violation> in line " + textTag.getUserData("lineNumber") + ": Missing \"title\" to provide clear lable for the component: <" + textTag.getNodeName() + ">")
+                            println(": <Potential violation> in line " + textTag.getUserData("lineNumber") + ": For ACCESSIBILITY, set \"title\" to provide clear lable for the component: <" + textTag.getNodeName() + ">")
                         }
                     }
                 }
@@ -271,7 +271,7 @@ object Lindroid {
                             print("Issue # $Counter")
 
                             println(": <Warning> in line " + textTag.getUserData("lineNumber") + ": The width size of <" + textTag.getNodeName() +
-                                    "> is \"" + el_width + "\", it must be not less than \"57dp\"")
+                                    "> is \"" + el_width + "\"For ACCESSIBILITY, it must be not less than \"57dp\"")
                         }
                     }
                     if (!(el_height.equals("wrap_content", ignoreCase = true) || el_height.equals("match_parent", ignoreCase = true))) {
@@ -281,7 +281,7 @@ object Lindroid {
                             Counter++
                             print("Issue # $Counter")
                             println(": <Warning> in line " + textTag.getUserData("lineNumber") + ": The height size of <" + textTag.getNodeName() +
-                                    "> is \"" + el_height + "\", it must be not less than \"57dp\"")
+                                    "> is \"" + el_height + "\"For ACCESSIBILITY, it must be not less than \"57dp\"")
                         }
                     }
                     //check if contentDescription missing or duplicated.
@@ -294,13 +294,13 @@ object Lindroid {
                             Counter++
                             print("Issue # $Counter")
 
-                            println(": <Violation> in line " + textTag.getUserData("lineNumber") + ": duplicate label \"" + el_contentDescription + "\" in <" + textTag.getNodeName() + ">")
+                            println(": <Violation> in line " + textTag.getUserData("lineNumber") + ": For ACCESSIBILITY, this is duplicate label \"" + el_contentDescription + "\" in <" + textTag.getNodeName() + ">")
                         } else contents.add(el_contentDescription)
                     } else {
                         pvCounter++
                         Counter++
                         print("Issue # $Counter")
-                        println(": <Potential violation> in line " + textTag.getUserData("lineNumber") + ": Missing \"contentDescription\" for the component: <" + textTag.getNodeName() + ">")
+                        println(": <Potential violation> in line " + textTag.getUserData("lineNumber") + ": For ACCESSIBILITY, set \"contentDescription\" for the component: <" + textTag.getNodeName() + ">")
                     }
                 }
 
