@@ -231,7 +231,10 @@ object Lindroid {
                     print("Issue # $Counter")
 
                     print(": <Potential violation> in line " + textTag.getUserData("lineNumber") + ": In the component <" + textTag.getNodeName())
-                    println("> Does the image you inserted contain text? \nIf the answer is \"yes\", this image is not accessible to persons with disabilities.")
+                    println("> Be careful about 3 issues:\n" +
+                            "1.\tIf the image for decorative purpose: not use contentDescription.\n" +
+                            "2.\tIf the image contains text information: it is not accessible to persons with disabilities.\n" +
+                            "3.\tOtherwise, it must has a clear description.\n")
                 }
 //******************/\/\/\/\/\/\/\/\/\/\/\/\..THIRD RULES: THE LABELS NOT DUPLICATE IN ONE ACTIVITY../\/\/\/\/\/\
                 if (textTag.getNodeName() == "menu"){
