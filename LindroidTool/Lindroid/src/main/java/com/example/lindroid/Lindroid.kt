@@ -166,7 +166,7 @@ object Lindroid {
                             Counter++
                             print("Issue # $Counter")
                             println(": <Warning> in line " + Tag.getUserData("lineNumber") + ": The text size of <" + Tag.getNodeName() +
-                                    "> is \"" + el_size + "\", For ACCESSIBILITY: it must be not less than \"31\".."
+                                    "> is \"" + el_size + "\", For ACCESSIBILITY: it must be not less than \"31\" OR use techniques that support text resizing or magnification/zoom feature.."
                             )
                         }
                     } catch (e: Exception) {
@@ -224,7 +224,7 @@ object Lindroid {
                         println(": <Warning> in line " + Tag.getUserData("lineNumber") + ": For ACCESSIBILITY, Try to write text tips to help user to fill field in component <" + Tag.getNodeName() + ">")
                     }
                 }
-
+/*
                 if (Tag.getNodeName() == "TextView"){
                     //if there is attribute
                     if (!el_size.isEmpty()) {
@@ -243,7 +243,7 @@ object Lindroid {
                         } catch (e: Exception) {
                         }
                     } //________________________________________________________________________\\
-                }
+                } */
 
 //******************/\/\/\/\/\/\/\/\/\/\/\/\..FIFTH RULES: WARN IF THE IMAGE CONTAIN TEXT../\/\/\/\/\/\/\/\/\/\/\
                 if (Tag.getNodeName() == "ImageView") {
